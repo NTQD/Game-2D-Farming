@@ -117,4 +117,14 @@ public class ItemContainer : ScriptableObject
         }
     }
 
+    public int GetCount(Item item)
+    {
+        ItemSlot slot = slots.Find(s => s.item == item);
+        return slot != null ? slot.count : 0;
+    }
+
+    public bool HasItem(Item item, int count = 1)
+    {
+        return GetCount(item) >= count;
+    }
 }

@@ -18,4 +18,5 @@ public class GameManager : MonoBehaviour
     public DragAndDropController dragAndDropController;
 
     public ToolbarController toolbarControllerGlobal;
+    public AnimalManager animalManager;
 }
