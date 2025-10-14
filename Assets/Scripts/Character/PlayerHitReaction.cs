@@ -40,6 +40,11 @@ public class PlayerHitReaction : PlayerHit
                 Debug.Log("Zjadłeś pomidora");
                 AddHunger(30);
                 break;
+
+            case "Egg":
+                Debug.Log("You ate an egg");
+                AddHunger(25);
+                break;
         }
         GameManager.instance.inventoryContainer.RemoveItem(GameManager.instance.toolbarControllerGlobal.GetItem, 1);
         toolbar.SetActive(!toolbar.activeInHierarchy);

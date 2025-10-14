@@ -17,6 +17,7 @@ public class ToolsCharacterController : MonoBehaviour
     [SerializeField] TileData toMowTiles;
     [SerializeField] TileData toSeedTiles;
     [SerializeField] TileData waterableTiles;
+    [SerializeField] GameObject feedPilePrefab; // Add this line
     InventoryController inventoryController;
     ToolbarController toolbarController;
     [SerializeField] GameObject toolbarPanel;
@@ -197,6 +198,16 @@ public class ToolsCharacterController : MonoBehaviour
             ChestHit hitChest = collidor.GetComponent<ChestHit>();
             PlayerHit hitPlayer = collidor.GetComponent<PlayerHit>();
 
+            // Check for incubating a chicken
+            ChickenController chicken = collidor.GetComponent<ChickenController>();
+            if (chicken != null && toolbarController.GetItem?.Name == "Egg")
+            {
+                chicken.StartIncubation();
+                GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, 1);
+                RefreshToolbar();
+                return true;
+            }
+
             if (hitTree != null && toolbarController.GetItem != null &&
                 toolbarController.GetItem.Name == "Axe" && CastRay() == true)
             {
@@ -216,7 +227,7 @@ public class ToolsCharacterController : MonoBehaviour
                 return true;
             }
             if (hitPlayer != null && toolbarController.GetItem != null && CastRayPlayer() == true && (toolbarController.GetItem.Name == "Food_Corn" || toolbarController.GetItem.Name == "Food_Parsley"
-                    || toolbarController.GetItem.Name == "Food_Potato" || toolbarController.GetItem.Name == "Food_Strawberry" || toolbarController.GetItem.Name == "Food_Tomato"))
+                    || toolbarController.GetItem.Name == "Food_Potato" || toolbarController.GetItem.Name == "Food_Strawberry" || toolbarController.GetItem.Name == "Food_Tomato" || toolbarController.GetItem.Name == "Egg"))
             {
                 hitPlayer.Hit();
                 return true;
@@ -320,7 +331,18 @@ public class ToolsCharacterController : MonoBehaviour
 
                     // Refreshing the count of seeds
                     RefreshToolbar();
-                }               
+                }
+                else if (toolbarController.GetItem.Name == "ChickenFeed")
+                {
+                    // Center the prefab on the tile
+                    Vector3 position = markerManager.markedCellPosition;
+                    position.x += 0.5f;
+                    position.y += 0.5f;
+
+                    Instantiate(feedPilePrefab, position, Quaternion.identity);
+                    GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, 1);
+                    RefreshToolbar();
+                }
             }
 
             //usage of tools if there is a planted tile

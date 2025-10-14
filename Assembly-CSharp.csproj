@@ -89,6 +89,7 @@
     <Compile Include="Assets\Scripts\TileMapReadController.cs" />
     <Compile Include="Assets\Scripts\Plants\Crop.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemContainer.cs" />
+    <Compile Include="Assets\Scripts\ChickenController.cs" />
     <Compile Include="Assets\Scripts\Tree\ToolHit.cs" />
     <Compile Include="Assets\Scripts\Shop\ShopTriggerController.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
