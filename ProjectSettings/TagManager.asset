@@ -12,6 +12,8 @@ TagManager:
   - dialoguePanel
   - ShowOnAbout
   - ShowOnControls
+  - startDialogue
+  - Feed
   layers:
   - Default
   - TransparentFX
