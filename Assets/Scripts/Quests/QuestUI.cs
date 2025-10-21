@@ -10,7 +10,7 @@ public class QuestUI : MonoBehaviour
     public TextMeshProUGUI questDescription;
     public TextMeshProUGUI questObjectives; // Add this line
 
-    private Quest currentQuest;
+    private QuestState currentQuest;
 
     void Start()
     {
@@ -18,6 +18,7 @@ public class QuestUI : MonoBehaviour
         QuestManager.instance.OnQuestStarted += ShowQuest;
         QuestManager.instance.OnQuestCompleted += HideQuest;
         QuestManager.instance.OnQuestUpdated += UpdateQuestUI;
+        QuestManager.instance.OnQuestFailed += ShowQuestFailure;
 
         if (questObjectives == null)
         {
@@ -34,38 +35,61 @@ public class QuestUI : MonoBehaviour
         QuestManager.instance.OnQuestStarted -= ShowQuest;
         QuestManager.instance.OnQuestCompleted -= HideQuest;
         QuestManager.instance.OnQuestUpdated -= UpdateQuestUI; // Add this line
+        QuestManager.instance.OnQuestFailed -= ShowQuestFailure;
     }
 
-    void ShowQuest(Quest quest)
+    void ShowQuest(QuestState quest)
     {
         currentQuest = quest;
         questPanel.SetActive(true);
-        questTitle.text = quest.title;
+        questTitle.text = quest.Quest.title;
         UpdateQuestUI(quest);
     }
 
-    void HideQuest(Quest quest)
-    {
-        currentQuest = null;
-        questPanel.SetActive(false);
-    }
-
-    void UpdateQuestUI(Quest quest)
+    void HideQuest(QuestState quest)
     {
         if (quest == currentQuest)
         {
-            questDescription.text = quest.description;
+            currentQuest = null;
+            questPanel.SetActive(false);
+        }
+    }
+
+    void UpdateQuestUI(QuestState quest)
+    {
+        if (quest == currentQuest)
+        {
+            questTitle.text = quest.Status == QuestStatus.Failed
+                ? $"{quest.Quest.title} (Failed)"
+                : quest.Quest.title;
+
+            questDescription.text = quest.Quest.description;
 
             StringBuilder objectivesText = new StringBuilder();
-            foreach (var objective in quest.objectives)
+            foreach (var objective in quest.Objectives)
             {
-                objectivesText.Append(objective.description);
-                if (objective.isCompleted)
+                objectivesText.Append(objective.GetProgressSummary());
+                if (objective.IsCompleted)
                 {
                     objectivesText.Append(" (Completed)");
                 }
                 objectivesText.Append("\n");
             }
+
+            if (quest.HasTimeLimit)
+            {
+                objectivesText.Append("Time remaining: ");
+                objectivesText.Append(quest.DaysRemaining);
+                objectivesText.Append(" day(s)\n");
+            }
+
+            if (quest.Status == QuestStatus.Failed && !string.IsNullOrEmpty(quest.FailureReason))
+            {
+                objectivesText.Append("Failure: ");
+                objectivesText.Append(quest.FailureReason);
+                objectivesText.Append("\n");
+            }
+
             if (questObjectives != null)
             {
                 questObjectives.text = objectivesText.ToString();
@@ -74,6 +98,18 @@ public class QuestUI : MonoBehaviour
             {
                 Debug.LogError("QuestUI: questObjectives TextMeshProUGUI is not assigned in the Inspector.");
             }
+        }
+    }
+
+    void ShowQuestFailure(QuestState quest)
+    {
+        if (currentQuest == quest)
+        {
+            UpdateQuestUI(quest);
+        }
+        else
+        {
+            ShowQuest(quest);
         }
     }
 }

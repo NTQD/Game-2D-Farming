@@ -1,4 +1,5 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +7,9 @@ using UnityEngine.UI;
 
 public class DayTimeController : MonoBehaviour
 {
+    public static DayTimeController Instance { get; private set; }
+    public static event Action<int> OnDayChanged;
+
     const float SecondsInDay = 86400f;
     public float time;
     [SerializeField] Text TimeDisplay;
@@ -15,6 +19,19 @@ public class DayTimeController : MonoBehaviour
     public int healthUpdaterCounter;
     public int temperatureUpdateCounter;
     public int day;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
 
     private void Start()
     {
@@ -111,6 +128,7 @@ public class DayTimeController : MonoBehaviour
             day += 1;
             //codzienna dostawa punktow
             MoneyController.money += 200;
+            OnDayChanged?.Invoke(day);
         }
         //Jesli zdrowie spranie do 0 zmiana na scene game over
         if(HealthController.currentHealth < 1)
