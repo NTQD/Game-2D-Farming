@@ -42,43 +42,48 @@ public class ItemContainer : ScriptableObject
 
     // Adds item to the container
 
-    public void Add(Item item, int count = 1)
-    {
-        // Determining if the item is stackable
-        if (item.stackable)
-        {   
-            // Finding slot with the same item
-            ItemSlot itemSlot = slots.Find(x => x.item == item);
-
-
-            if (itemSlot != null)
-            {
-                itemSlot.count += count;  // Adding the count
+        public void Add(Item item, int count = 1)
+        {
+            // Determining if the item is stackable
+            if (item.stackable)
+            {   
+                // Finding slot with the same item
+                ItemSlot itemSlot = slots.Find(x => x.item == item);
+    
+    
+                if (itemSlot != null)
+                {
+                    itemSlot.count += count;  // Adding the count
+                }
+                else
+                {
+                    // If the item doesn't exist yet it is added
+                    itemSlot = slots.Find(x => x.item == null);
+    
+                    if (itemSlot != null)
+                    {
+                        itemSlot.item = item;
+                        itemSlot.count = count;  // 1 item
+                    }
+                }
             }
             else
             {
-                // If the item doesn't exist yet it is added
-                itemSlot = slots.Find(x => x.item == null);
-
+                ItemSlot itemSlot = slots.Find(x => x.item == null);
+    
                 if (itemSlot != null)
                 {
                     itemSlot.item = item;
-                    itemSlot.count = count;  // 1 item
+                    itemSlot.count = count;
                 }
             }
-        }
-        else
-        {
-            ItemSlot itemSlot = slots.Find(x => x.item == null);
-
-            if (itemSlot != null)
+    
+            // Notify the QuestManager
+            if (QuestManager.instance != null)
             {
-                itemSlot.item = item;
-                itemSlot.count = count;
+                QuestManager.instance.CheckGatherObjective(item, count);
             }
         }
-    }
-
 
     public void RemoveItem(Item removedItem, int count)
     {
@@ -115,6 +120,19 @@ public class ItemContainer : ScriptableObject
                 itemSlot.Clear();
             }
         }
+    }
+
+    public int GetItemCount(Item item)
+    {
+        int totalCount = 0;
+        foreach (var slot in slots)
+        {
+            if (slot.item == item)
+            {
+                totalCount += slot.count;
+            }
+        }
+        return totalCount;
     }
 
 }

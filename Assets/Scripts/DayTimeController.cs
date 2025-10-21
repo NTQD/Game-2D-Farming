@@ -74,6 +74,7 @@ public class DayTimeController : MonoBehaviour
         {
             light.intensity = 1f;
             TemperatureController.currentTemperature = 100;
+            temperatureUpdateCounter = 0;
         }
 
 

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9e460adb5fe4594784f4a39c00da5db, type: 3}
+  m_Name: Quest_FoodSecurity
+  m_EditorClassIdentifier: 
+  title: Ensure Food Security
+  description: Plow the land, plant starter seeds, and successfully harvest the necessary
+    crops to ensure a steady food supply.
+  objectives:
+  - type: 1
+    description: Plow enough required plots of land.
+    item: {fileID: 0}
+    amount: 10
+    isCompleted: 0
+  - type: 0
+    description: Plant starter seeds.
+    item: {fileID: 11400000, guid: 83b2a3ba6d8dc60498ca448ad83b28de, type: 2}
+    amount: 10
+    isCompleted: 0
+  - type: 0
+    description: Harvest at least 20 units of each crop.
+    item: {fileID: 11400000, guid: cfac03f7705cb774a842c305fcb0c688, type: 2}
+    amount: 20
+    isCompleted: 0
+  reward:
+    itemReward: {fileID: 11400000, guid: cfac03f7705cb774a842c305fcb0c688, type: 2}
+    itemAmount: 30

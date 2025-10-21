@@ -277,6 +277,11 @@ public class ToolsCharacterController : MonoBehaviour
                 else if (fields[(Vector2Int)selectedTilePosition].plowable && toolbarController.GetItem.Name == "Hoe")
                 {
                     cropsManager.Plow(selectedTilePosition);
+                    // Notify QuestManager about plowing
+                    if (QuestManager.instance != null)
+                    {
+                        QuestManager.instance.CheckBuildObjective(1); // Assuming 1 unit of 'build' for each plow
+                    }
                 }
                 else if (fields[(Vector2Int)selectedTilePosition].ableToSeed && toolbarController.GetItem.isSeed == true)
                 {
@@ -289,6 +294,10 @@ public class ToolsCharacterController : MonoBehaviour
                             {
                                 cropsManager.SeedCrop(selectedTilePosition, "corn");
                                 GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, cornSeedsCount);   // Deletes 4 seeds
+                                if (QuestManager.instance != null)
+                                {
+                                    QuestManager.instance.CheckPlantObjective(toolbarController.GetItem, cornSeedsCount);
+                                }
                             }
                         break;
                         case "Seeds_Parsley":
@@ -298,6 +307,10 @@ public class ToolsCharacterController : MonoBehaviour
                             {
                                 cropsManager.SeedCrop(selectedTilePosition, "parsley");
                                 GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, parsleySeedsCount);  // Deletes 3 seeds
+                                if (QuestManager.instance != null)
+                                {
+                                    QuestManager.instance.CheckPlantObjective(toolbarController.GetItem, parsleySeedsCount);
+                                }
                             }
                         break;
                         case "Seeds_Potato":
@@ -307,6 +320,10 @@ public class ToolsCharacterController : MonoBehaviour
                             {
                                 cropsManager.SeedCrop(selectedTilePosition, "potato");
                                 GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, potatoSeedsCount);   // Deletes 1 seed
+                                if (QuestManager.instance != null)
+                                {
+                                    QuestManager.instance.CheckPlantObjective(toolbarController.GetItem, potatoSeedsCount);
+                                }
                             }
                         break;
                         case "Seeds_Strawberry":
@@ -316,6 +333,10 @@ public class ToolsCharacterController : MonoBehaviour
                             {
                                 cropsManager.SeedCrop(selectedTilePosition, "strawberry");
                                 GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, strawberrySeedsCount); // Deletes 6 seeds
+                                if (QuestManager.instance != null)
+                                {
+                                    QuestManager.instance.CheckPlantObjective(toolbarController.GetItem, strawberrySeedsCount);
+                                }
                             }
                         break;
                         case "Seeds_Tomato":
@@ -325,6 +346,10 @@ public class ToolsCharacterController : MonoBehaviour
                             {
                                 cropsManager.SeedCrop(selectedTilePosition, "tomato");
                                 GameManager.instance.inventoryContainer.RemoveItem(toolbarController.GetItem, tomatoSeedsCount);   // Deletes 3 seeds
+                                if (QuestManager.instance != null)
+                                {
+                                    QuestManager.instance.CheckPlantObjective(toolbarController.GetItem, tomatoSeedsCount);
+                                }
                             }
                         break;
                     }

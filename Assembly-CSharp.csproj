@@ -65,8 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Plants\Parsley.cs" />
+    <Compile Include="Assets\Scripts\Quests\Quest.cs" />
     <Compile Include="Assets\Scripts\MoneyController.cs" />
     <Compile Include="Assets\Scripts\ChestHit.cs" />
+    <Compile Include="Assets\Scripts\Quests\QuestUI.cs" />
     <Compile Include="Assets\Scripts\MarkerManager.cs" />
     <Compile Include="Assets\Scripts\Plants\Tomato.cs" />
     <Compile Include="Assets\Scripts\Inventory\SeedContainer.cs" />
@@ -75,9 +77,11 @@
     <Compile Include="Assets\Scripts\Toolbar\ToolbarController.cs" />
     <Compile Include="Assets\Scripts\Plants\Potato.cs" />
     <Compile Include="Assets\Scripts\Shop\UI_ShopController.cs" />
+    <Compile Include="Assets\Scripts\Tree\TreeManager.cs" />
     <Compile Include="Assets\Scripts\Tree\PickUpItem.cs" />
     <Compile Include="Assets\Scripts\FireCamp\CampFireHit.cs" />
     <Compile Include="Assets\Scripts\Inventory\Item.cs" />
+    <Compile Include="Assets\Scripts\Quests\QuestGiver.cs" />
     <Compile Include="Assets\Scripts\CropsReadController.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemPanel.cs" />
     <Compile Include="Assets\Scripts\Sounds\Sound.cs" />
@@ -105,6 +109,7 @@
     <Compile Include="Assets\Scripts\Plants\Strawberry.cs" />
     <Compile Include="Assets\Scripts\Plants\Corn.cs" />
     <Compile Include="Assets\Scripts\Character\CameraMovement.cs" />
+    <Compile Include="Assets\Scripts\Quests\QuestManager.cs" />
     <Compile Include="Assets\Scripts\DayTimeController.cs" />
     <Compile Include="Assets\Scripts\Character\PlayerHitReaction.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />

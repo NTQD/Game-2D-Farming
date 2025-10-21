@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class UI_ShopController : MonoBehaviour
 {
+    public static UI_ShopController instance;
+
     private Transform container;
     private Transform shopItemTemplate;
     [SerializeField] private MoneyController money;
@@ -13,8 +15,21 @@ public class UI_ShopController : MonoBehaviour
     [SerializeField] GameObject inventoryPanel;
     public bool isOpen;
 
+    [SerializeField] private GameObject shopPanel;
+    [SerializeField] private GameObject questPanel;
+    [SerializeField] private QuestGiver questGiver;
+
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         container = transform.Find("container");
         shopItemTemplate = container.Find("shopItemTemplate");
     }
@@ -110,24 +125,37 @@ public class UI_ShopController : MonoBehaviour
         toolbarPanel.SetActive(true);
     }
 
+    public void ShowShopPanel()
+    {
+        shopPanel.SetActive(true);
+        questPanel.SetActive(false);
+    }
+
+    public void ShowQuestPanel()
+    {
+        shopPanel.SetActive(false);
+        questPanel.SetActive(true);
+        if (questGiver != null)
+        {
+            questGiver.Interact(); // This will start the quest if not already started
+        }
+    }
+
     public void Show()
     {
         isOpen = true;
         gameObject.SetActive(true);
-        
+        ShowShopPanel(); // Default to showing the shop panel
     }
 
     public void Hide()
     {
         isOpen = false;
         gameObject.SetActive(false);
+        questPanel.SetActive(false); // Add this line
     }
 
     //dodać obsługę kliknięcia i zakup przedmiotu
 
-    private void Update()
-    {
-        inventoryPanel.SetActive(false);
-        toolbarPanel.SetActive(true);
-    }
+
 }

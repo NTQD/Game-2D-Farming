@@ -18,9 +18,10 @@ public class TreeCuttable : ToolHit
             MoneyController.money += 30;
 
             // Spawning wood
-            while (dropCount > 0)
+            int drops = dropCount;
+            while (drops > 0)
             {
-                dropCount -= 1;
+                drops -= 1;
 
                 // Calculating where logs will drop
                 Vector3 position = transform.position;
@@ -30,7 +31,19 @@ public class TreeCuttable : ToolHit
                 log.transform.position = position;
             }
 
-            Destroy(gameObject);
+            if (TreeManager.instance != null)
+            {
+                TreeManager.instance.RegisterCutTree(gameObject);
+            }
+            else
+            {
+                Debug.LogError("TreeManager instance not found. Destroying tree as a fallback.");
+                Destroy(gameObject);
+            }
         }       
+    }
+    public void ResetHitCount()
+    {
+        hitCount = 0;
     }
 }
