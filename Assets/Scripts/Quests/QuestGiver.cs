@@ -8,11 +8,26 @@ public class QuestGiver : MonoBehaviour
 
     public void StartQuest()
     {
-        if (!isQuestStarted)
+        if (QuestManager.instance == null || quest == null)
+        {
+            return;
+        }
+
+        QuestStatus status = QuestManager.instance.GetQuestStatus(quest);
+
+        if (status == QuestStatus.Completed)
+        {
+            isQuestStarted = false;
+            return;
+        }
+
+        if (status == QuestStatus.Active)
         {
             isQuestStarted = true;
-            QuestManager.instance.StartQuest(quest);
+            return;
         }
+
+        isQuestStarted = QuestManager.instance.StartQuest(quest);
     }
 
     // We will call this method from the player's interaction script

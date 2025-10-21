@@ -81,7 +81,9 @@ public class ItemContainer : ScriptableObject
             // Notify the QuestManager
             if (QuestManager.instance != null)
             {
+                int totalCount = GetItemCount(item);
                 QuestManager.instance.CheckGatherObjective(item, count);
+                QuestManager.instance.RegisterStockpile(item, totalCount);
             }
         }
 
