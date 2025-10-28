@@ -8,8 +8,11 @@ public class Quest : ScriptableObject
     public string title;
     [TextArea]
     public string description;
-    public List<QuestObjective> objectives;
+    public Quest prerequisiteQuest; // New: Quest that must be completed before this one can start
+    public List<QuestStage> stages; // Changed to stages
     public QuestReward reward;
+    public bool isCompleted = false; // Added to track quest completion
+    public int currentStageIndex = 0; // New: To track current stage
 
     [System.Serializable]
     public class QuestReward
@@ -17,6 +20,16 @@ public class Quest : ScriptableObject
         public Item itemReward;
         public int itemAmount;
     }
+}
+
+[System.Serializable]
+public class QuestStage
+{
+    public string stageName;
+    [TextArea]
+    public string stageDescription;
+    public List<QuestObjective> objectives;
+    public bool isStageCompleted = false; // New: To track stage completion
 }
 
 [System.Serializable]

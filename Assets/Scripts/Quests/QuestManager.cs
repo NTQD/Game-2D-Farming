@@ -27,15 +27,68 @@ public class QuestManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        if (CampfireManager.instance != null)
+        {
+            CampfireManager.instance.OnCampfireStateChanged += HandleCampfireStateChanged;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (CampfireManager.instance != null)
+        {
+            CampfireManager.instance.OnCampfireStateChanged -= HandleCampfireStateChanged;
+        }
+    }
+
+    private void HandleCampfireStateChanged()
+    {
+        Quest warmNightQuest = activeQuests.FirstOrDefault(q => q.title == "Warm Night");
+        if (warmNightQuest != null && warmNightQuest.stages.Count > 0 && warmNightQuest.currentStageIndex < warmNightQuest.stages.Count)
+        {
+            QuestStage currentStage = warmNightQuest.stages[warmNightQuest.currentStageIndex];
+            // Check objective for maintaining campfire
+            QuestObjective campfireObjective = currentStage.objectives.FirstOrDefault(o => o.description.Contains("Maintain the main camp's red fire"));
+            if (campfireObjective != null && !campfireObjective.isCompleted)
+            {
+                if (CampfireManager.instance.GetConsecutiveNightsLit() >= campfireObjective.amount)
+                {
+                    campfireObjective.isCompleted = true;
+                    OnQuestUpdated?.Invoke(warmNightQuest);
+                    CheckQuestCompletion(warmNightQuest);
+                }
+            }
+
+            // Check for failure condition
+            if (CampfireManager.instance.GetConsecutiveNightsUnlit() > 2) // More than two consecutive nights unlit
+            {
+                // Implement quest failure logic here
+                Debug.Log("Warm Night quest failed: Campfire unlit for too long!");
+                // You might want to remove the quest, reset its state, or trigger a specific failure event.
+                // For now, let's just mark it as failed and remove it from active quests.
+                warmNightQuest.isCompleted = true; // Mark as completed (failed)
+                activeQuests.Remove(warmNightQuest);
+                OnQuestCompleted?.Invoke(warmNightQuest); // Invoke completion event even for failure
+            }
+        }
+    }
+
     public void StartQuest(Quest quest)
     {
         if (!activeQuests.Contains(quest))
         {
             activeQuests.Add(quest);
-            // Reset objectives
-            foreach (var objective in quest.objectives)
+            quest.currentStageIndex = 0; // Initialize current stage
+            // Reset objectives for the first stage
+            if (quest.stages.Count > 0)
             {
-                objective.isCompleted = false;
+                foreach (var objective in quest.stages[0].objectives)
+                {
+                    objective.isCompleted = false;
+                }
+                quest.stages[0].isStageCompleted = false;
             }
             OnQuestStarted?.Invoke(quest);
             Debug.Log("Quest started: " + quest.title);
@@ -46,18 +99,19 @@ public class QuestManager : MonoBehaviour
     {
         foreach (var quest in activeQuests)
         {
-            foreach (var objective in quest.objectives)
+            if (quest.stages.Count > 0 && quest.currentStageIndex < quest.stages.Count)
             {
-                if (objective.type == ObjectiveType.Gather && !objective.isCompleted && objective.item == item)
+                QuestStage currentStage = quest.stages[quest.currentStageIndex];
+                foreach (var objective in currentStage.objectives)
                 {
-                    // This is a simplified check. A real implementation would check the inventory total.
-                    // For now, we assume any pickup contributes.
-                    // We will refine this later.
-                    if (GameManager.instance.inventoryContainer.GetItemCount(item) >= objective.amount)
+                    if (objective.type == ObjectiveType.Gather && !objective.isCompleted && objective.item == item)
                     {
-                        objective.isCompleted = true;
-                        OnQuestUpdated?.Invoke(quest);
-                        CheckQuestCompletion(quest);
+                        if (GameManager.instance.inventoryContainer.GetItemCount(item) >= objective.amount)
+                        {
+                            objective.isCompleted = true;
+                            OnQuestUpdated?.Invoke(quest);
+                            CheckQuestCompletion(quest);
+                        }
                     }
                 }
             }
@@ -68,18 +122,20 @@ public class QuestManager : MonoBehaviour
     {
         foreach (var quest in activeQuests)
         {
-            foreach (var objective in quest.objectives)
+            if (quest.stages.Count > 0 && quest.currentStageIndex < quest.stages.Count)
             {
-                if (objective.type == ObjectiveType.Build && !objective.isCompleted)
+                QuestStage currentStage = quest.stages[quest.currentStageIndex];
+                foreach (var objective in currentStage.objectives)
                 {
-                    // For build objectives, we assume each call to this method signifies one unit of progress.
-                    // You might need more complex logic here depending on how 'building' is defined.
-                    objective.amount -= amount; // Decrementing the required amount
-                    if (objective.amount <= 0)
+                    if (objective.type == ObjectiveType.Build && !objective.isCompleted)
                     {
-                        objective.isCompleted = true;
-                        OnQuestUpdated?.Invoke(quest);
-                        CheckQuestCompletion(quest);
+                        objective.amount -= amount; // Decrementing the required amount
+                        if (objective.amount <= 0)
+                        {
+                            objective.isCompleted = true;
+                            OnQuestUpdated?.Invoke(quest);
+                            CheckQuestCompletion(quest);
+                        }
                     }
                 }
             }
@@ -90,16 +146,20 @@ public class QuestManager : MonoBehaviour
     {
         foreach (var quest in activeQuests)
         {
-            foreach (var objective in quest.objectives)
+            if (quest.stages.Count > 0 && quest.currentStageIndex < quest.stages.Count)
             {
-                if (objective.type == ObjectiveType.Plant && !objective.isCompleted && objective.item == item)
+                QuestStage currentStage = quest.stages[quest.currentStageIndex];
+                foreach (var objective in currentStage.objectives)
                 {
-                    objective.amount -= amount; // Decrementing the required amount
-                    if (objective.amount <= 0)
+                    if (objective.type == ObjectiveType.Plant && !objective.isCompleted && objective.item == item)
                     {
-                        objective.isCompleted = true;
-                        OnQuestUpdated?.Invoke(quest);
-                        CheckQuestCompletion(quest);
+                        objective.amount -= amount; // Decrementing the required amount
+                        if (objective.amount <= 0)
+                        {
+                            objective.isCompleted = true;
+                            OnQuestUpdated?.Invoke(quest);
+                            CheckQuestCompletion(quest);
+                        }
                     }
                 }
             }
@@ -108,15 +168,37 @@ public class QuestManager : MonoBehaviour
 
     private void CheckQuestCompletion(Quest quest)
     {
-        if (quest.objectives.All(o => o.isCompleted))
+        if (quest.stages.Count > 0 && quest.currentStageIndex < quest.stages.Count)
         {
-            CompleteQuest(quest);
+            QuestStage currentStage = quest.stages[quest.currentStageIndex];
+            if (currentStage.objectives.All(o => o.isCompleted))
+            {
+                currentStage.isStageCompleted = true;
+                quest.currentStageIndex++;
+                OnQuestUpdated?.Invoke(quest);
+
+                if (quest.currentStageIndex >= quest.stages.Count)
+                {
+                    CompleteQuest(quest);
+                }
+                else
+                {
+                    // Reset objectives for the new current stage
+                    foreach (var objective in quest.stages[quest.currentStageIndex].objectives)
+                    {
+                        objective.isCompleted = false;
+                    }
+                    quest.stages[quest.currentStageIndex].isStageCompleted = false;
+                    Debug.Log($"Quest {quest.title}: Advanced to stage {quest.currentStageIndex + 1}");
+                }
+            }
         }
     }
 
     private void CompleteQuest(Quest quest)
     {
         activeQuests.Remove(quest);
+        quest.isCompleted = true; // Mark the quest as completed
         OnQuestCompleted?.Invoke(quest);
         Debug.Log("Quest completed: " + quest.title);
 

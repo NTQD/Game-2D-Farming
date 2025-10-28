@@ -16,6 +16,8 @@ public class DayTimeController : MonoBehaviour
     public int temperatureUpdateCounter;
     public int day;
 
+    public static event System.Action OnDayEnded; // New event
+
     private void Start()
     {
         day = 0;
@@ -109,6 +111,7 @@ public class DayTimeController : MonoBehaviour
         {
             time = 0;
             day += 1;
+            OnDayEnded?.Invoke(); // Invoke the event
             //codzienna dostawa punktow
             MoneyController.money += 200;
         }
