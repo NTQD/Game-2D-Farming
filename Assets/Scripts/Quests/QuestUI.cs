@@ -60,28 +60,36 @@ public class QuestUI : MonoBehaviour
 
     public void AcceptQuestOrAdvance()
     {
+        if (currentlyDisplayedQuest == null) return;
+
+        // Find the index of the currently displayed quest
+        int currentQuestIndex = availableQuests.IndexOf(currentlyDisplayedQuest);
+
+        // If there is a next quest available, display it
+        if (currentQuestIndex != -1 && currentQuestIndex < availableQuests.Count - 1)
+        {
+            ShowQuest(availableQuests[currentQuestIndex + 1]);
+        }
+        else
+        {
+            // No more quests to show, close the panel
+            questPanel.SetActive(false);
+        }
+    }
+
+    public void StartCurrentlyDisplayedQuest()
+    {
         if (currentlyDisplayedQuest == null || questGiver == null) return;
 
-        // If the quest is completed, grant reward and advance to next quest
-        if (currentlyDisplayedQuest.isCompleted)
-        {
-            // Reward is granted by QuestManager.CompleteQuest, which is called by CheckQuestCompletion
-            // We just need to find and display the next available quest.
-            int currentQuestIndex = availableQuests.IndexOf(currentlyDisplayedQuest);
-            if (currentQuestIndex != -1 && currentQuestIndex < availableQuests.Count - 1)
-            {
-                ShowQuest(availableQuests[currentQuestIndex + 1]);
-            }
-            else
-            {
-                // All quests completed or no more quests to show
-                questPanel.SetActive(false);
-            }
-        }
-        else // Quest is not completed, so start it
+        // Only start if the quest is not already active or completed
+        if (!QuestManager.instance.activeQuests.Contains(currentlyDisplayedQuest) && !currentlyDisplayedQuest.isCompleted)
         {
             questGiver.StartQuest(currentlyDisplayedQuest);
-            questPanel.SetActive(false);
+            questPanel.SetActive(false); // Close the UI after starting the quest
+        }
+        else
+        {
+            Debug.LogWarning($"Quest {currentlyDisplayedQuest.title} cannot be started. It's either active or completed.");
         }
     }
 
@@ -159,12 +167,6 @@ public class QuestUI : MonoBehaviour
 
         UpdateQuestObjectivesText(quest);
         questPanel.SetActive(true);
-
-        // Enable/disable Accept button based on quest completion status
-        if (acceptButton != null)
-        {
-            acceptButton.interactable = !quest.isCompleted; // Only interactable if not completed
-        }
     }
 
     private void UpdateQuestObjectivesText(Quest quest)
