@@ -18,6 +18,7 @@ public class QuestUI : MonoBehaviour
     public Quest shipOfHopeQuest;
 
     private List<Quest> availableQuests = new List<Quest>();
+    private int currentQuestIndex = -1; // Re-introduced for keyboard navigation
     private QuestGiver questGiver; // Reference to the QuestGiver
 
     private Quest currentlyDisplayedQuest; // New: To track the quest currently shown in the UI
@@ -93,6 +94,26 @@ public class QuestUI : MonoBehaviour
         }
     }
 
+    public void ShowNextQuest()
+    {
+        if (availableQuests.Count <= 1) return;
+
+        currentQuestIndex = (currentQuestIndex + 1) % availableQuests.Count;
+        ShowQuest(availableQuests[currentQuestIndex]);
+    }
+
+    public void ShowPreviousQuest()
+    {
+        if (availableQuests.Count <= 1) return;
+
+        currentQuestIndex--;
+        if (currentQuestIndex < 0)
+        {
+            currentQuestIndex = availableQuests.Count - 1;
+        }
+        ShowQuest(availableQuests[currentQuestIndex]);
+    }
+
     public void CancelQuestUI()
     {
         questPanel.SetActive(false);
@@ -130,7 +151,17 @@ public class QuestUI : MonoBehaviour
 
     void Update()
     {
-        // Update method is now empty as UI navigation is handled by buttons.
+        if (questPanel.activeInHierarchy && availableQuests.Count > 0)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                ShowPreviousQuest();
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                ShowNextQuest();
+            }
+        }
     }
 
     public void DisplayAvailableQuests(List<Quest> quests)
@@ -144,11 +175,12 @@ public class QuestUI : MonoBehaviour
             if (questDescription != null) questDescription.text = string.Empty;
             if (questObjectives != null) questObjectives.text = string.Empty;
             currentlyDisplayedQuest = null;
+            currentQuestIndex = -1; // Reset index
             return;
         }
 
-        // If there are available quests, show the first one by default
-        ShowQuest(availableQuests[0]);
+        currentQuestIndex = 0; // Initialize to first quest
+        ShowQuest(availableQuests[currentQuestIndex]);
     }
 
     public void ShowQuest(Quest quest)
@@ -161,6 +193,7 @@ public class QuestUI : MonoBehaviour
         }
 
         currentlyDisplayedQuest = quest;
+        currentQuestIndex = availableQuests.IndexOf(quest); // Update currentQuestIndex
 
         if (questTitle != null) questTitle.text = quest.title;
         if (questDescription != null) questDescription.text = quest.description;
