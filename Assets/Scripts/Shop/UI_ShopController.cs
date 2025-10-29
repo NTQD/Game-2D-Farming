@@ -131,13 +131,16 @@ public class UI_ShopController : MonoBehaviour
         questPanel.SetActive(false);
     }
 
+    [SerializeField] private QuestUI questUI; // Add a reference to QuestUI
+
     public void ShowQuestPanel()
     {
         shopPanel.SetActive(false);
         questPanel.SetActive(true);
-        if (questGiver != null)
+        if (questGiver != null && questUI != null)
         {
-            questGiver.Interact(); // This will start the quest if not already started
+            List<Quest> availableQuests = questGiver.GetAvailableQuests();
+            questUI.DisplayAvailableQuests(availableQuests); // Pass available quests to QuestUI
         }
     }
 
@@ -151,8 +154,20 @@ public class UI_ShopController : MonoBehaviour
     public void Hide()
     {
         isOpen = false;
+        if (questPanel != null)
+        {
+            questPanel.SetActive(false); // ensure quest UI hidden
+        }
+
+        // If the shop panel was already destroyed (e.g., scene unload), avoid accessing it
+        if (shopPanel == null || ReferenceEquals(shopPanel, null))
+        {
+            Debug.LogWarning("UI_ShopController: shopPanel reference is missing or destroyed when hiding.");
+            return;
+        }
+
         gameObject.SetActive(false);
-        questPanel.SetActive(false); // Add this line
+        shopPanel.SetActive(false);
     }
 
     //dodać obsługę kliknięcia i zakup przedmiotu
