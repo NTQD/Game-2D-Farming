@@ -139,8 +139,8 @@ public class UI_ShopController : MonoBehaviour
         questPanel.SetActive(true);
         if (questGiver != null && questUI != null)
         {
-            List<Quest> availableQuests = questGiver.GetAvailableQuests();
-            questUI.DisplayAvailableQuests(availableQuests); // Pass available quests to QuestUI
+            List<Quest> allQuests = questGiver.GetAllQuests();
+            questUI.DisplayAvailableQuests(allQuests); // Pass all quests to QuestUI
         }
     }
 

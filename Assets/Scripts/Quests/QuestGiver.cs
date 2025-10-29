@@ -22,6 +22,11 @@ public class QuestGiver : MonoBehaviour
         return availableQuests;
     }
 
+    public List<Quest> GetAllQuests()
+    {
+        return new List<Quest>(quests);
+    }
+
     // This method will be called by UI_ShopController to start a specific quest
     public void StartQuest(Quest questToStart)
     {
