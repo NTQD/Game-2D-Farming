@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9e460adb5fe4594784f4a39c00da5db, type: 3}
+  m_Name: Quest_WarmNight
+  m_EditorClassIdentifier: 
+  title: "\u0110\xEAm \u1EA4m \xC1p"
+  description: "Kh\xE1m ph\xE1 h\xF2n \u0111\u1EA3o v\xE0 khai th\xE1c \u0111\u1EE7
+    g\u1ED7 duy tr\xEC l\u1EEDa tr\u1EA1i ban \u0111\xEAm v\xE0 t\xEDch tr\u1EEF
+    nguy\xEAn li\u1EC7u c\u1EA7n thi\u1EBFt cho vi\u1EC7c x\xE2y d\u1EF1ng trong
+    t\u01B0\u01A1ng lai."
+  objectives:
+  - type: 0
+    description: "Khai th\xE1c v\xE0 thu th\u1EADp 50 b\xF3 c\u1EE7i kh\xF4."
+    item: {fileID: 11400000, guid: 5e239568605621747826406fb0e330d2, type: 2}
+    amount: 50
+    isCompleted: 0
+  - type: 1
+    description: "Duy tr\xEC ng\u1ECDn l\u1EEDa c\u1EE7a b\u1EA1n trong ba \u0111\xEAm
+      li\xEAn ti\u1EBFp. L\u01B0u \xFD : L\u1EEDa tr\u1EA1i ph\u1EA3i \u0111\u01B0\u1EE3c
+      \u0111\u1ED1t li\xEAn t\u1EE5c t\u1EEB 8:00 t\u1ED1i \u0111\u1EBFn 5:00 s\xE1ng
+      \u0111\u1EC3 \u0111\u01B0\u1EE3c t\xEDnh l\xE0 m\u1ED9t \"\u0110\xEAm \u1EA5m
+      \xE1p\""
+    item: {fileID: 0}
+    amount: 3
+    isCompleted: 0
+  reward:
+    itemReward: {fileID: 11400000, guid: 538e98182733a1a459dda296a5aebb1a, type: 2}
+    itemAmount: 1
+  isCompleted: 0

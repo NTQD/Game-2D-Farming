@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6e556531c85764428dd70e49915ddf4, type: 3}
+  m_Name: Deserted Island House Quest
+  m_EditorClassIdentifier: 
+  title: "Ng\xF4i Nh\xE0 N\u01A1i Hoang \u0110\u1EA3o"
+  description: "S\u1EED d\u1EE5ng c\xE1c t\xE0i nguy\xEAn thu th\u1EADp \u0111\u01B0\u1EE3c
+    \u0111\u1EC3 x\xE2y d\u1EF1ng m\u1ED9t ng\xF4i nh\xE0 v\u1EEFng ch\u1EAFc b\u1EB1ng
+    nh\u1EEFng v\u1EADt li\u1EC7u trong danh s\xE1ch cho cu\u1ED9c s\u1ED1ng l\xE2u
+    d\xE0i"
+  prerequisiteQuest: {fileID: 11400000, guid: 1abea599dbe643b438aa8657198c3c95, type: 2}
+  stages:
+  - stageName: "\u0110\u1EB7t n\u1EC1n m\xF3ng ng\xF4i nh\xE0"
+    stageDescription: "\u0110\u1EB7t n\u1EC1n m\xF3ng \u0111\u1EA7u ti\xEAn cho ng\xF4i
+      nh\xE0 c\u1EE7a b\u1EA1n."
+    objectives:
+    - type: 1
+      description: "\u0110\u1EB7t n\u1EC1n m\xF3ng ng\xF4i nh\xE0"
+      item: {fileID: 0}
+      amount: 1
+      currentProgress: 0
+      isCompleted: 0
+    isStageCompleted: 0
+  - stageName: "Thu th\u1EADp v\u1EADt li\u1EC7u "
+    stageDescription: "Thu th\u1EADp c\xE1c v\u1EADt li\u1EC7u c\u1EA7n thi\u1EBFt
+      cho vi\u1EC7c x\xE2y d\u1EF1ng"
+    objectives:
+    - type: 0
+      description: Collect 100 Wood
+      item: {fileID: 11400000, guid: 5e239568605621747826406fb0e330d2, type: 2}
+      amount: 100
+      currentProgress: 0
+      isCompleted: 0
+    - type: 0
+      description: Collect 50 Stone
+      item: {fileID: 11400000, guid: 074aff3d3c649f443bca172942226523, type: 2}
+      amount: 50
+      currentProgress: 0
+      isCompleted: 0
+    isStageCompleted: 0
+  - stageName: "D\u1EF1ng nh\xE0"
+    stageDescription: "Ho\xE0n thanhd vi\u1EC7c x\xE2y d\u1EF1ng ng\xF4i nh\xE0 c\u1EE7a
+      b\u1EA1n"
+    objectives:
+    - type: 1
+      description: Finish building the house
+      item: {fileID: 0}
+      amount: 1
+      currentProgress: 0
+      isCompleted: 0
+    isStageCompleted: 0
+  reward:
+    itemReward: {fileID: 11400000, guid: ad7e00a9c6880ba45b70d3c3863b6041, type: 2}
+    itemAmount: 1
+  isCompleted: 0
+  currentStageIndex: 0

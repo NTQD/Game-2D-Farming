@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2cd17291a69d4d4c84b477584146527, type: 3}
+  m_Name: Warm Night Quest
+  m_EditorClassIdentifier: 
+  title: "\u0110\xEAm \u1EA4m \xC1p"
+  description: "Kh\xE1m ph\xE1 h\xF2n \u0111\u1EA3o \u0111\u1EC3 khai th\xE1c \u0111\u1EE7
+    g\u1ED7 cho tr\u1EA1i \u0111\xEAm v\xE0 d\u1EF1 tr\u1EEF v\u1EADt li\u1EC7u c\u1EA7n
+    thi\u1EBFt cho vi\u1EC7c x\xE2y d\u1EF1ng trong t\u01B0\u01A1ng lai"
+  prerequisiteQuest: {fileID: 11400000, guid: f82ffd46aa8ef2e4dba7acafe0b47f98, type: 2}
+  stages:
+  - stageName: "Thu th\u1EADp g\u1ED7"
+    stageDescription: "Ch\u1EB7t v\xE0 thu th\u1EADp 50 b\xF3 g\u1ED7 kh\xF4"
+    objectives:
+    - type: 0
+      description: Collect 50 Dry Wood
+      item: {fileID: 11400000, guid: 5e239568605621747826406fb0e330d2, type: 2}
+      amount: 50
+      currentProgress: 0
+      isCompleted: 0
+    isStageCompleted: 0
+  - stageName: "Gi\u1EEF l\u1EEDa"
+    stageDescription: "Duy tr\xEC ng\u1ECDn l\u1EEDa \u0111\u1ECF \u1EDF tr\u1EA1i
+      ch\xEDnh trong ba \u0111\xEAm li\xEAn ti\u1EBFp"
+    objectives:
+    - type: 1
+      description: Maintain the main camp's red fire for 3 consecutive nights
+      item: {fileID: 0}
+      amount: 3
+      currentProgress: 0
+      isCompleted: 0
+    isStageCompleted: 0
+  reward:
+    itemReward: {fileID: 11400000, guid: 538e98182733a1a459dda296a5aebb1a, type: 2}
+    itemAmount: 1
+  isCompleted: 0
+  currentStageIndex: 0

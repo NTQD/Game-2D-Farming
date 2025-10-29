@@ -18,4 +18,19 @@ public class GameManager : MonoBehaviour
     public DragAndDropController dragAndDropController;
 
     public ToolbarController toolbarControllerGlobal;
+
+    [Header("End Game UI")]
+    public GameObject congratulationsScreen;
+
+    public void ShowCongratulationsScreen()
+    {
+        if (congratulationsScreen != null)
+        {
+            congratulationsScreen.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("GameManager: Congratulations screen reference is missing.");
+        }
+    }
 }

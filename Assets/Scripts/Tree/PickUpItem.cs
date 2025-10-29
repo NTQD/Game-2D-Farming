@@ -63,6 +63,12 @@ public class PickUpItem : MonoBehaviour
             {
                 GameManager.instance.inventoryContainer.Add(item, count);
 
+                // Notify QuestManager about the gathered item
+                if (QuestManager.instance != null)
+                {
+                    QuestManager.instance.CheckGatherObjective(item, count);
+                }
+
                 if (toolbar != null)
                 {
                     toolbar.SetActive(!toolbar.activeInHierarchy);

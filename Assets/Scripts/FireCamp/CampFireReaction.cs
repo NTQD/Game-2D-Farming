@@ -15,6 +15,10 @@ public class CampFireReaction : CampFireHit
     public override void Hit()
     {
         fire.SetActive(true);
+        if (CampfireManager.instance != null)
+        {
+            CampfireManager.instance.SetCampfireLit(true);
+        }
 
         GameManager.instance.inventoryContainer.RemoveItem(GameManager.instance.toolbarControllerGlobal.GetItem, 5);
 
@@ -29,5 +33,9 @@ public class CampFireReaction : CampFireHit
 
         yield return new WaitForSeconds(120);
         fire.SetActive(false);
+        if (CampfireManager.instance != null)
+        {
+            CampfireManager.instance.SetCampfireLit(false);
+        }
     }
 }

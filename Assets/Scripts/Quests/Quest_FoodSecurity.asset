@@ -12,22 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9e460adb5fe4594784f4a39c00da5db, type: 3}
   m_Name: Quest_FoodSecurity
   m_EditorClassIdentifier: 
-  title: Ensure Food Security
-  description: Plow the land, plant starter seeds, and successfully harvest the necessary
-    crops to ensure a steady food supply.
+  title: "M\xF9a V\u1EE5 \u0110\u1EA7u Ti\xEAn"
+  description: "Qu\u1ED1c \u0111\u1EA5t, gieo tr\u1ED3ng h\u1EA1t gi\u1ED1ng kh\u1EDFi
+    \u0111\u1EA7u, v\xE0 thu ho\u1EA1ch th\xE0nh c\xF4ng c\xE1c lo\u1EA1i c\xE2y
+    tr\u1ED3ng c\u1EA7n thi\u1EBFt \u0111\u1EC3 \u0111\u1EA3m b\u1EA3o ngu\u1ED3n
+    cung th\u1EF1c ph\u1EA9m \u1ED5n \u0111\u1ECBnh."
   objectives:
   - type: 1
-    description: Plow enough required plots of land.
+    description: "C\xE0y \u0111\u1EE7 s\u1ED1 th\u1EEDa \u0111\u1EA5t c\u1EA7n thi\u1EBFt"
     item: {fileID: 0}
     amount: 10
     isCompleted: 0
-  - type: 0
-    description: Plant starter seeds.
+  - type: 4
+    description: "Gieo những hạt giống đầu tin"
     item: {fileID: 11400000, guid: 83b2a3ba6d8dc60498ca448ad83b28de, type: 2}
     amount: 10
     isCompleted: 0
   - type: 0
-    description: Harvest at least 20 units of each crop.
+    description: "Thu ho\u1EA1ch t\u1ED1i thi\u1EC3u 20 \u0111\u01A1n v\u1ECB khoai
+      t\xE2y"
     item: {fileID: 11400000, guid: cfac03f7705cb774a842c305fcb0c688, type: 2}
     amount: 20
     isCompleted: 0

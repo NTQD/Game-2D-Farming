@@ -28,19 +28,11 @@ public class CampfireManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if (CampfireManager.instance != null)
-        {
-            CampfireManager.instance.OnCampfireStateChanged += HandleCampfireStateChanged;
-        }
         DayTimeController.OnDayEnded += ProcessNightTransition;
     }
 
     private void OnDisable()
     {
-        if (CampfireManager.instance != null)
-        {
-            CampfireManager.instance.OnCampfireStateChanged -= HandleCampfireStateChanged;
-        }
         DayTimeController.OnDayEnded -= ProcessNightTransition;
     }
 

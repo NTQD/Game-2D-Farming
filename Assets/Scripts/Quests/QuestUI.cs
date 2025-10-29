@@ -88,8 +88,10 @@ public class QuestUI : MonoBehaviour
     public void CancelQuestUI()
     {
         questPanel.SetActive(false);
-        // Optionally, open the shop UI here if UI_ShopController is available
-        // UI_ShopController.instance.OpenShopUI();
+        if (UI_ShopController.instance != null)
+        {
+            UI_ShopController.instance.ShowShopPanel();
+        }
     }
 
     // Handlers for QuestManager events

@@ -39,6 +39,7 @@ public class QuestObjective
     public string description;
     public Item item; // For gathering objectives
     public int amount;
+    public int currentProgress; // New: To track current progress for the objective
     public bool isCompleted;
 }
 
