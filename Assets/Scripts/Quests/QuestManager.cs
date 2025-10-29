@@ -197,7 +197,7 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    private void CompleteQuest(Quest quest)
+    public void CompleteQuest(Quest quest)
     {
         activeQuests.Remove(quest);
         quest.isCompleted = true; // Mark the quest as completed
@@ -209,18 +209,6 @@ public class QuestManager : MonoBehaviour
         { 
             GameManager.instance.inventoryContainer.Add(quest.reward.itemReward, quest.reward.itemAmount);
             Debug.Log("Rewarded " + quest.reward.itemAmount + " " + quest.reward.itemReward.Name);
-        }
-
-        // Special handling for Ship of Hope Quest completion
-        if (quest.title == "Ship of Hope" && boatPrefab != null)
-        {
-            GameObject boatInstance = Instantiate(boatPrefab, new Vector3(0, 0, 0), Quaternion.identity); // Adjust spawn position as needed
-            BoatController boatController = boatInstance.GetComponent<BoatController>();
-            if (boatController != null)
-            {
-                // Assuming a shore position, e.g., (10, 0, 0)
-                boatController.AppearOnShore(new Vector3(10, 0, 0)); // Placeholder position
-            }
         }
     }
 

@@ -1,16 +1,18 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement; // New: For scene management
 
 public class BoatController : MonoBehaviour
 {
     public Sprite[] boatStates; // Assign your 4 boat state sprites here
     public float animationSpeed = 0.5f; // Speed of animation during sailing
     public float sailingSpeed = 1.0f; // Speed of boat moving out to sea
-    public Vector3 sailingDirection = Vector3.right; // Direction boat sails off-screen
+    public Vector3 sailingDirection = new Vector3(-1, -1, 0).normalized; // Direction boat sails off-screen (bottom-left)
 
     private SpriteRenderer spriteRenderer;
     private int currentSpriteIndex = 0;
     private bool isSailing = false;
+    private bool playerIsNear = false; // New: To track if player is in proximity
 
     private void Awake()
     {
@@ -31,11 +33,29 @@ public class BoatController : MonoBehaviour
         }
     }
 
-    private void OnMouseDown() // Detects a click on the GameObject if it has a Collider
+    private void Update()
     {
-        if (!isSailing)
+        if (playerIsNear && Input.GetKeyDown(KeyCode.F) && !isSailing)
         {
             StartSailing();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerIsNear = true;
+            Debug.Log("Player is near the boat. Press F to get on board.");
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerIsNear = false;
+            Debug.Log("Player left the boat area.");
         }
     }
 
@@ -45,6 +65,13 @@ public class BoatController : MonoBehaviour
         {
             isSailing = true;
             Debug.Log("Boat is starting to sail...");
+
+            // Deactivate the player GameObject
+            if (GameManager.instance != null && GameManager.instance.player != null)
+            {
+                GameManager.instance.player.SetActive(false);
+            }
+
             if (boatStates != null && boatStates.Length > 1)
             {
                 StartCoroutine(AnimateBoat());
@@ -73,9 +100,9 @@ public class BoatController : MonoBehaviour
             // For now, let's just indicate game complete after a short delay
             if (Vector3.Distance(Vector3.zero, transform.position) > 100f) // Example: 100 units away from origin
             {
-                Debug.Log("Boat has sailed away. Game Completed!");
-                // Trigger game completion sequence
-                GameManager.instance.ShowCongratulationsScreen(); // Assuming GameManager has this method
+                Debug.Log("Boat has sailed away. Game Completed! Loading Victory Scene...");
+                // Load the Victory Scene
+                SceneManager.LoadScene("VictorySceneName"); // IMPORTANT: Replace "VictorySceneName" with your actual Victory scene name
                 yield break;
             }
             yield return null;

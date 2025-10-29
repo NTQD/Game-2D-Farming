@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
 
     public ToolbarController toolbarControllerGlobal;
 
+    public Transform boatSpawnPoint; // New: Transform for where the boat should spawn
+
     [Header("End Game UI")]
     public GameObject congratulationsScreen;
 

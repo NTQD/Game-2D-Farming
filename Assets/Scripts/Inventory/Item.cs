@@ -11,4 +11,8 @@ public class Item : ScriptableObject
     public bool stackable;
     public Sprite icon;
     public bool isSeed;
-}
+
+    public virtual void Use()
+    {
+        Debug.Log($"Using item: {Name}");
+    }}
