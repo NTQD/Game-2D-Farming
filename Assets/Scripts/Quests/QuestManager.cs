@@ -14,6 +14,8 @@ public class QuestManager : MonoBehaviour
     public System.Action<Quest> OnQuestCompleted;
     public System.Action<Quest> OnQuestUpdated;
 
+    public GameObject boatPrefab; // New: Reference to the boat prefab to instantiate upon quest completion
+
     private void Awake()
     {
         if (instance == null)
@@ -53,7 +55,8 @@ public class QuestManager : MonoBehaviour
             QuestObjective campfireObjective = currentStage.objectives.FirstOrDefault(o => o.description.Contains("Maintain the main camp's red fire"));
             if (campfireObjective != null && !campfireObjective.isCompleted)
             {
-                if (CampfireManager.instance.GetConsecutiveNightsLit() >= campfireObjective.amount)
+                campfireObjective.currentProgress = CampfireManager.instance.GetConsecutiveNightsLit();
+                if (campfireObjective.currentProgress >= campfireObjective.amount)
                 {
                     campfireObjective.isCompleted = true;
                     OnQuestUpdated?.Invoke(warmNightQuest);
@@ -87,6 +90,7 @@ public class QuestManager : MonoBehaviour
                 foreach (var objective in quest.stages[0].objectives)
                 {
                     objective.isCompleted = false;
+                    objective.currentProgress = 0; // Initialize currentProgress
                 }
                 quest.stages[0].isStageCompleted = false;
             }
@@ -127,17 +131,16 @@ public class QuestManager : MonoBehaviour
                 QuestStage currentStage = quest.stages[quest.currentStageIndex];
                 foreach (var objective in currentStage.objectives)
                 {
-                    if (objective.type == ObjectiveType.Build && !objective.isCompleted)
-                    {
-                        objective.amount -= amount; // Decrementing the required amount
-                        if (objective.amount <= 0)
-                        {
-                            objective.isCompleted = true;
-                            OnQuestUpdated?.Invoke(quest);
-                            CheckQuestCompletion(quest);
-                        }
-                    }
-                }
+                                    if (objective.type == ObjectiveType.Build && !objective.isCompleted)
+                                    {
+                                        objective.currentProgress += amount; // Increment currentProgress
+                                        if (objective.currentProgress >= objective.amount)
+                                        {
+                                            objective.isCompleted = true;
+                                            OnQuestUpdated?.Invoke(quest);
+                                            CheckQuestCompletion(quest);
+                                        }
+                                    }                }
             }
         }
     }
@@ -151,17 +154,16 @@ public class QuestManager : MonoBehaviour
                 QuestStage currentStage = quest.stages[quest.currentStageIndex];
                 foreach (var objective in currentStage.objectives)
                 {
-                    if (objective.type == ObjectiveType.Plant && !objective.isCompleted && objective.item == item)
-                    {
-                        objective.amount -= amount; // Decrementing the required amount
-                        if (objective.amount <= 0)
-                        {
-                            objective.isCompleted = true;
-                            OnQuestUpdated?.Invoke(quest);
-                            CheckQuestCompletion(quest);
-                        }
-                    }
-                }
+                                    if (objective.type == ObjectiveType.Plant && !objective.isCompleted && objective.item == item)
+                                    {
+                                        objective.currentProgress += amount; // Increment currentProgress
+                                        if (objective.currentProgress >= objective.amount)
+                                        {
+                                            objective.isCompleted = true;
+                                            OnQuestUpdated?.Invoke(quest);
+                                            CheckQuestCompletion(quest);
+                                        }
+                                    }                }
             }
         }
     }
@@ -208,5 +210,39 @@ public class QuestManager : MonoBehaviour
             GameManager.instance.inventoryContainer.Add(quest.reward.itemReward, quest.reward.itemAmount);
             Debug.Log("Rewarded " + quest.reward.itemAmount + " " + quest.reward.itemReward.Name);
         }
+
+        // Special handling for Ship of Hope Quest completion
+        if (quest.title == "Ship of Hope" && boatPrefab != null)
+        {
+            GameObject boatInstance = Instantiate(boatPrefab, new Vector3(0, 0, 0), Quaternion.identity); // Adjust spawn position as needed
+            BoatController boatController = boatInstance.GetComponent<BoatController>();
+            if (boatController != null)
+            {
+                // Assuming a shore position, e.g., (10, 0, 0)
+                boatController.AppearOnShore(new Vector3(10, 0, 0)); // Placeholder position
+            }
+        }
+    }
+
+    public int GetCurrentObjectiveProgress(QuestObjective objective)
+    {
+        switch (objective.type)
+        {
+            case ObjectiveType.Gather:
+                if (objective.item != null && GameManager.instance != null && GameManager.instance.inventoryContainer != null)
+                {
+                    return GameManager.instance.inventoryContainer.GetItemCount(objective.item);
+                }
+                break;
+            case ObjectiveType.Build:
+            case ObjectiveType.Plant:
+                return objective.currentProgress;
+            case ObjectiveType.Explore:
+            case ObjectiveType.Trade:
+                // For these types, currentProgress should be updated directly by specific game events.
+                // For now, return currentProgress.
+                return objective.currentProgress;
+        }
+        return 0; // Default or unknown objective type
     }
 }
