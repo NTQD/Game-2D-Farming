@@ -38,7 +38,7 @@ public class BoatItem : Item
         // Remove the item from inventory after use
         if (GameManager.instance != null && GameManager.instance.inventoryContainer != null)
         {
-            GameManager.instance.inventoryContainer.Remove(this, 1); // Remove 1 instance of this BoatItem
+            GameManager.instance.inventoryContainer.RemoveItem(this, 1); // Remove 1 instance of this BoatItem
             Debug.Log($"Removed {Name} from inventory.");
         }
     }

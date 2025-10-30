@@ -36,10 +36,6 @@ public class QuestCompleterDebug : MonoBehaviour
 
         foreach (Quest quest in allQuests)
         {
-            // Reset quest state before attempting to complete it, in case it persisted from a previous run
-            quest.ResetQuest();
-
-            // Now proceed to mark as completed and notify QuestManager
             if (!quest.isCompleted)
             {
                 // Mark quest as completed

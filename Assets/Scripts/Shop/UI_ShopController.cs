@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
@@ -11,13 +11,69 @@ public class UI_ShopController : MonoBehaviour
     private Transform shopItemTemplate;
     [SerializeField] private MoneyController money;
     public Button btn;
-    [SerializeField] GameObject toolbarPanel;
-    [SerializeField] GameObject inventoryPanel;
+    [SerializeField] private GameObject toolbarPanel;
+    [SerializeField] private GameObject inventoryPanel;
     public bool isOpen;
 
     [SerializeField] private GameObject shopPanel;
     [SerializeField] private GameObject questPanel;
     [SerializeField] private QuestGiver questGiver;
+    [SerializeField] private QuestUI questUI;
+
+    private bool missingShopPanelLogged;
+    private bool missingQuestPanelLogged;
+
+    private GameObject LocatePanel(string panelName)
+    {
+        if (string.IsNullOrEmpty(panelName))
+        {
+            return null;
+        }
+
+        foreach (Transform child in GetComponentsInChildren<Transform>(true))
+        {
+            if (child.name == panelName)
+            {
+                return child.gameObject;
+            }
+        }
+
+        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+        foreach (GameObject go in allObjects)
+        {
+            if (go.name == panelName && go.scene.IsValid())
+            {
+                return go;
+            }
+        }
+
+        return null;
+    }
+
+    private void CachePanelReferences()
+    {
+        if (shopPanel == null)
+        {
+            shopPanel = LocatePanel("ShopPanel");
+        }
+
+        if (questUI == null)
+        {
+            questUI = FindObjectOfType<QuestUI>(includeInactive: true);
+        }
+
+        if (questPanel == null)
+        {
+            if (questUI != null && questUI.questPanel != null)
+            {
+                questPanel = questUI.questPanel;
+            }
+            else
+            {
+                questPanel = LocatePanel("QuestPanel");
+            }
+        }
+    }
 
     private void Awake()
     {
@@ -28,15 +84,17 @@ public class UI_ShopController : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
 
         container = transform.Find("container");
-        shopItemTemplate = container.Find("shopItemTemplate");
+        shopItemTemplate = container != null ? container.Find("shopItemTemplate") : null;
+
+        CachePanelReferences();
     }
 
     private void Start()
     {
-
         Dictionary<string, Sprite> plantsDictionary = CreateSeedsFromSprite();
 
         CreateItemButton(plantsDictionary["Seeds_Corn"], "Seeds_Corn", 100, 0, "Corn Seeds");
@@ -45,8 +103,18 @@ public class UI_ShopController : MonoBehaviour
         CreateItemButton(plantsDictionary["Seeds_Strawberry"], "Seeds_Strawberry", 150, 3, "Strawberry seeds");
         CreateItemButton(plantsDictionary["Seeds_Potato"], "Seeds_Potato", 110, 4, "Potato tuber");
 
+        CachePanelReferences();
+        if (shopPanel != null)
+        {
+            shopPanel.SetActive(false);
+        }
+        if (questPanel != null)
+        {
+            questPanel.SetActive(false);
+        }
+
+        isOpen = false;
         gameObject.SetActive(false);
-        Hide();
     }
 
     private Dictionary<string, Sprite> CreateSeedsFromSprite()
@@ -60,11 +128,16 @@ public class UI_ShopController : MonoBehaviour
         }
 
         return plantsDictionary;
-
     }
 
     private void CreateItemButton(Sprite itemSprite, string itemName, int itemCost, int positionIndex, string displayedName)
     {
+        if (container == null || shopItemTemplate == null)
+        {
+            Debug.LogError("UI_ShopController: container or shopItemTemplate is missing.");
+            return;
+        }
+
         Transform shopItemTransform = Instantiate(shopItemTemplate, container);
         RectTransform shopItemRectTransform = shopItemTransform.GetComponent<RectTransform>();
         float shopItemHeight = 60f;
@@ -119,28 +192,38 @@ public class UI_ShopController : MonoBehaviour
                 GameManager.instance.inventoryContainer.Add(item);
             }
         }
-        
 
-        toolbarPanel.SetActive(!toolbarPanel.activeInHierarchy);
-        toolbarPanel.SetActive(true);
+        if (toolbarPanel != null)
+        {
+            toolbarPanel.SetActive(!toolbarPanel.activeInHierarchy);
+            toolbarPanel.SetActive(true);
+        }
     }
 
     public void ShowShopPanel()
     {
+        if (!EnsurePanels())
+        {
+            return;
+        }
+
         shopPanel.SetActive(true);
         questPanel.SetActive(false);
     }
 
-    [SerializeField] private QuestUI questUI; // Add a reference to QuestUI
-
     public void ShowQuestPanel()
     {
+        if (!EnsurePanels())
+        {
+            return;
+        }
+
         shopPanel.SetActive(false);
         questPanel.SetActive(true);
         if (questGiver != null && questUI != null)
         {
             List<Quest> allQuests = questGiver.GetAllQuests();
-            questUI.DisplayAvailableQuests(allQuests); // Pass all quests to QuestUI
+            questUI.DisplayAvailableQuests(allQuests);
         }
     }
 
@@ -148,29 +231,50 @@ public class UI_ShopController : MonoBehaviour
     {
         isOpen = true;
         gameObject.SetActive(true);
-        ShowShopPanel(); // Default to showing the shop panel
+        ShowShopPanel();
     }
 
     public void Hide()
     {
         isOpen = false;
-        if (questPanel != null)
+        if (!EnsurePanels())
         {
-            questPanel.SetActive(false); // ensure quest UI hidden
-        }
-
-        // If the shop panel was already destroyed (e.g., scene unload), avoid accessing it
-        if (shopPanel == null || ReferenceEquals(shopPanel, null))
-        {
-            Debug.LogWarning("UI_ShopController: shopPanel reference is missing or destroyed when hiding.");
             return;
         }
 
-        gameObject.SetActive(false);
+        questPanel.SetActive(false);
         shopPanel.SetActive(false);
+        gameObject.SetActive(false);
     }
 
-    //dodać obsługę kliknięcia i zakup przedmiotu
+    private bool EnsurePanels()
+    {
+        CachePanelReferences();
 
+        bool hasAll = true;
 
+        if (shopPanel == null)
+        {
+            if (!missingShopPanelLogged)
+            {
+                Debug.LogWarning("UI_ShopController: shopPanel reference missing; assign it in the inspector.");
+                missingShopPanelLogged = true;
+            }
+            hasAll = false;
+        }
+
+        if (questPanel == null)
+        {
+            if (!missingQuestPanelLogged)
+            {
+                Debug.LogWarning("UI_ShopController: questPanel reference missing; assign it in the inspector.");
+                missingQuestPanelLogged = true;
+            }
+            hasAll = false;
+        }
+
+        return hasAll;
+    }
+
+    //dodac obsluge klikniecia i zakup przedmiotu
 }

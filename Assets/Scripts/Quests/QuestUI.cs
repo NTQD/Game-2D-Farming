@@ -283,6 +283,8 @@ public class QuestUI : MonoBehaviour
             availableQuests.AddRange(quests);
         }
 
+        Debug.Log($"QuestUI: DisplayAvailableQuests received {availableQuests.Count} quests.");
+
         if (availableQuests.Count == 0)
         {
             questPanel.SetActive(true);
@@ -315,7 +317,10 @@ public class QuestUI : MonoBehaviour
 
         if (questTitle != null)
         {
-            questTitle.text = quest.title;
+            Debug.Log($"QuestUI: Attempting to set title. questTitle is not null. Quest title: {quest.title}");
+            questTitle.SetText(quest.title);
+            // Force TextMeshPro to update its mesh
+            // questTitle.ForceMeshUpdate(); // ForceMeshUpdate might not be needed with SetText
         }
         else
         {

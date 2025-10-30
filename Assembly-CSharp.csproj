@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\ChestHit.cs" />
     <Compile Include="Assets\Scripts\Quests\QuestUI.cs" />
     <Compile Include="Assets\Scripts\MarkerManager.cs" />
+    <Compile Include="Assets\Scripts\HouseInteract.cs" />
     <Compile Include="Assets\Scripts\Plants\Tomato.cs" />
     <Compile Include="Assets\Scripts\Inventory\SeedContainer.cs" />
     <Compile Include="Assets\Scripts\Inventory\InventoryController.cs" />
@@ -78,14 +79,17 @@
     <Compile Include="Assets\Scripts\Toolbar\ToolbarController.cs" />
     <Compile Include="Assets\Scripts\Plants\Potato.cs" />
     <Compile Include="Assets\Scripts\BoatController.cs" />
+    <Compile Include="Assets\Scripts\QuestCompleterDebug.cs" />
     <Compile Include="Assets\Scripts\Shop\UI_ShopController.cs" />
     <Compile Include="Assets\Scripts\Tree\TreeManager.cs" />
     <Compile Include="Assets\Scripts\Tree\PickUpItem.cs" />
+    <Compile Include="Assets\Scripts\BuildController.cs" />
     <Compile Include="Assets\Scripts\FireCamp\CampFireHit.cs" />
     <Compile Include="Assets\Scripts\Inventory\Item.cs" />
     <Compile Include="Assets\Scripts\Quests\WarmNightQuest.cs" />
     <Compile Include="Assets\Scripts\Quests\QuestGiver.cs" />
     <Compile Include="Assets\Scripts\CropsReadController.cs" />
+    <Compile Include="Assets\Scripts\Inventory\ItemBuilding.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemPanel.cs" />
     <Compile Include="Assets\Scripts\Sounds\Sound.cs" />
     <Compile Include="Assets\Scripts\Parameters\HungerController.cs" />
@@ -113,6 +117,7 @@
     <Compile Include="Assets\Scripts\Plants\Strawberry.cs" />
     <Compile Include="Assets\Scripts\Plants\Corn.cs" />
     <Compile Include="Assets\Scripts\Character\CameraMovement.cs" />
+    <Compile Include="Assets\Scripts\Inventory\BoatItem.cs" />
     <Compile Include="Assets\Scripts\Quests\DesertedIslandHouseQuest.cs" />
     <Compile Include="Assets\Scripts\Quests\QuestManager.cs" />
     <Compile Include="Assets\Scripts\DayTimeController.cs" />
