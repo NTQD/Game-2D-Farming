@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcaf6e1a48c879d4aaebfb507b0de1f2, type: 3}
+  m_Name: House
+  m_EditorClassIdentifier: 
+  Name: 
+  stackable: 0
+  icon: {fileID: 0}
+  isSeed: 0
+  buildingPrefab: {fileID: 7705602273238777818, guid: 6183b360344caab49a8d93453140e9b1,
+    type: 3}
+  woodCost: 1
