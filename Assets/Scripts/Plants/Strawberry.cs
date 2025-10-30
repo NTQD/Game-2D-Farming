@@ -1,12 +1,31 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
-[CreateAssetMenu(menuName = "Data/Crops/Strawberry")]
-public class Strawberry : Crop
+public class Strawberry : MonoBehaviour
 {
-    private void OnEnable()
+    [SerializeField] TileBase state0;
+
+    [SerializeField] TileBase state1;
+
+    [SerializeField] TileBase state2;
+
+    [SerializeField] TileBase state3;
+
+    [SerializeField] TileBase state4;
+
+    [SerializeField] TileBase state5;
+
+    [SerializeField] Tilemap cropTilemap;
+
+
+    private string currentTime;
+
+    public void Seed(Vector3Int position)
     {
-        cropName = "strawberry";
-        growthTime = 20f;
-        totalStages = 6;
+        currentTime = Time.time.ToString("f6");
+        Debug.Log(currentTime.ToString());
+        cropTilemap.SetTile(position, state0);
     }
 }

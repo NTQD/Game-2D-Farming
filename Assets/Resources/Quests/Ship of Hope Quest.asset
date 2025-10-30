@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc367820172810f4e83ac4f4ff0ea392, type: 3}
+  m_Name: Ship of Hope Quest
+  m_EditorClassIdentifier: 
+  title: "Con Thuy\u1EC1n Hi V\u1ECDng"
+  description: "Thu th\u1EADp v\u1EADt li\u1EC7u v\xE0 \u0111\xF3ng m\u1ED9t chi\u1EBFc
+    thuy\u1EC1n \u0111\u1EE7 kh\u1EA3 n\u0103ng \u0111i bi\u1EC3n \u0111\u1ED3ng
+    th\u1EDDi chu\u1EA9n b\u1ECB \u0111\u1EE7 th\u1EE9c \u0103n \u0111\u1EC3 d\u0169ng
+    c\u1EA3m th\u1EF1c hi\u1EC7n h\xE0nh tr\xECnh tr\u1EDF v\u1EC1 ."
+  prerequisiteQuest: {fileID: 11400000, guid: 15a3cfa09f06cc04d88ffdc60c24e170, type: 2}
+  stages:
+  - stageName: "S\u1EDF h\u0169u b\u1EA3n thi\u1EBFt k\u1EBF t\xE0u"
+    stageDescription: "Nh\u1EADn \u0111\u01B0\u1EE3c b\u1EA3n thi\u1EBFt k\u1EBF
+      t\xE0u."
+    objectives:
+    - type: 3
+      description: Acquire Ship Blueprint
+      item: {fileID: 11400000, guid: ad7e00a9c6880ba45b70d3c3863b6041, type: 2}
+      amount: 1
+      currentProgress: 0
+      isCompleted: 0
+    isStageCompleted: 0
+  - stageName: "Thu th\u1EADp v\u1EADt li\u1EC7u"
+    stageDescription: "Thu th\u1EADp v\u1EADt li\u1EC7u c\u1EA7n thi\u1EBFt \u0111\u1EC3
+      \u0111\xF3ng thuy\u1EC1n."
+    objectives:
+    - type: 0
+      description: Collect 200 Special Wood
+      item: {fileID: 11400000, guid: 5e239568605621747826406fb0e330d2, type: 2}
+      amount: 200
+      currentProgress: 0
+      isCompleted: 0
+    - type: 0
+      description: Collect 60 Metal Parts
+      item: {fileID: 11400000, guid: e40f489889d0bfa4899e6583ea90f387, type: 2}
+      amount: 60
+      currentProgress: 0
+      isCompleted: 0
+    isStageCompleted: 0
+  - stageName: "\u0110\xF3ng thuy\u1EC1n"
+    stageDescription: "\u0110\xF3ng th\xE0nh c\xF4ng m\u1ED9t chi\u1EBFc thuy\u1EC1n
+      c\xF3 kh\u1EA3 n\u0103ng v\u01B0\u1EE3t bi\u1EC3n."
+    objectives:
+    - type: 1
+      description: Assemble the boat
+      item: {fileID: 0}
+      amount: 1
+      currentProgress: 0
+      isCompleted: 0
+    isStageCompleted: 0
+  - stageName: "Chu\u1EA9n b\u1ECB cho cu\u1ED9c h\xE0nh tr\xECnh"
+    stageDescription: "D\u1EF1 tr\u1EEF \u0111\u1EE7 th\u1EE9c \u0103n cho chuy\u1EBFn
+      \u0111i."
+    objectives:
+    - type: 0
+      description: Store 50 units of Food
+      item: {fileID: 11400000, guid: bec8c09c7088fa746b9faaa0f8f96a37, type: 2}
+      amount: 50
+      currentProgress: 0
+      isCompleted: 0
+    - type: 0
+      description: Store 50 units of Food
+      item: {fileID: 11400000, guid: 49b5ea417b005ba4792e8dd67cc3f243, type: 2}
+      amount: 50
+      currentProgress: 0
+      isCompleted: 0
+    - type: 0
+      description: Store 50 units of Food
+      item: {fileID: 11400000, guid: cfac03f7705cb774a842c305fcb0c688, type: 2}
+      amount: 50
+      currentProgress: 0
+      isCompleted: 0
+    - type: 0
+      description: Store 50 units of Food
+      item: {fileID: 11400000, guid: a6a6bc5e2520631438ae29344f3daa6b, type: 2}
+      amount: 50
+      currentProgress: 0
+      isCompleted: 0
+    - type: 0
+      description: Store 50 units of Food
+      item: {fileID: 11400000, guid: c3c3beca5f8c45149a193d642a5f6ad3, type: 2}
+      amount: 50
+      currentProgress: 0
+      isCompleted: 0
+    isStageCompleted: 0
+  reward:
+    itemReward: {fileID: 11400000, guid: d2c33bc79cbabff46bd302d548ffdfbc, type: 2}
+    itemAmount: 1
+  isCompleted: 0
+  currentStageIndex: 0

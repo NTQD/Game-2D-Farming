@@ -13,12 +13,40 @@ public class PickUpItem : MonoBehaviour
 
     private void Start()
     {
-        player = GameManager.instance.player.transform;
+        // Try to get player from GameManager, otherwise fall back to finding by tag
+        if (GameManager.instance != null && GameManager.instance.player != null)
+        {
+            player = GameManager.instance.player.transform;
+        }
+        else
+        {
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            if (playerObj != null)
+            {
+                player = playerObj.transform;
+                Debug.LogWarning("PickUpItem: Player reference was not available on GameManager. Falling back to GameObject.FindWithTag('Player').");
+            }
+            else
+            {
+                Debug.LogError("PickUpItem: Player reference not found. Make sure GameManager.instance.player is set or the player GameObject has the 'Player' tag.");
+            }
+        }
+
         toolbar = GameObject.FindWithTag("toolbar");
+        if (toolbar == null)
+        {
+            Debug.LogWarning("PickUpItem: toolbar GameObject with tag 'toolbar' not found.");
+        }
     }
 
     private void Update()
     {
+        if (player == null)
+        {
+            // If player is not assigned we cannot proceed
+            return;
+        }
+
         float distance = Vector3.Distance(transform.position, player.position);
 
         // If the player is not in the distance to pick up logs no function is executed
@@ -31,12 +59,21 @@ public class PickUpItem : MonoBehaviour
 
         if (distance < 0.1f)
         {
-            if (GameManager.instance.inventoryContainer != null)
+            if (GameManager.instance != null && GameManager.instance.inventoryContainer != null)
             {
                 GameManager.instance.inventoryContainer.Add(item, count);
 
-                toolbar.SetActive(!toolbar.activeInHierarchy);
-                toolbar.SetActive(true);
+                // Notify QuestManager about the gathered item
+                if (QuestManager.instance != null)
+                {
+                    QuestManager.instance.CheckGatherObjective(item, count);
+                }
+
+                if (toolbar != null)
+                {
+                    toolbar.SetActive(!toolbar.activeInHierarchy);
+                    toolbar.SetActive(true);
+                }
             }
             else
             {

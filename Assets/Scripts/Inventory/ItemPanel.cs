@@ -21,8 +21,7 @@ public class ItemPanel : MonoBehaviour
 
     private void SetIndex()
     {
-        int count = (buttons != null) ? buttons.Count : 0;
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < inventory.slots.Count && i < buttons.Count; i++)
         {
             buttons[i].SetIndex(i);
         }
@@ -35,27 +34,18 @@ public class ItemPanel : MonoBehaviour
 
     public void Show()
     {
-        // Always clean all buttons first to avoid stale placeholder text (e.g., "999")
-        for (int b = 0; b < (buttons?.Count ?? 0); b++)
+        for (int i = 0; i < inventory.slots.Count && i < buttons.Count; i++)
         {
-            buttons[b].Clean();
-        }
-
-        if (inventory == null || inventory.slots == null || buttons == null)
-        {
-            return;
-        }
-
-        int max = Mathf.Min(inventory.slots.Count, buttons.Count);
-        for (int i = 0; i < max; i++)
-        {
-            ItemSlot slot = inventory.slots[i];
-            if (slot != null && slot.item != null)
+            if (inventory.slots[i].item == null)
+            {
+                // Hiding what the slot in inventory contains in the button
+                buttons[i].Clean();
+            }
+            else
             {
                 // Setting the button to the item in the inventory
-                buttons[i].Set(slot);
+                buttons[i].Set(inventory.slots[i]);
             }
-            // else keep cleaned state
         }
     }
 

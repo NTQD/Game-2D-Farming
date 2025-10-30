@@ -15,7 +15,7 @@ public class DialogueManager : MonoBehaviour
     public string[] sentences;
     private int index;
     public Text textDisplay;
-    public float typingSpeed;
+    public float typingSpeed = 0.02f; // faster default typing speed
     public GameObject pressToContinue;
 
     private void Awake()
@@ -41,6 +41,13 @@ public class DialogueManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Skip entire tutorial with Q
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            EndDialogue();
+            return;
+        }
+
         // Stopping random letters from appearing
         if (textDisplay.text == sentences[index] && dialogueActive && Input.GetKeyDown(KeyCode.Space))
         {
@@ -75,15 +82,21 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                dialogueBox.SetActive(false);
-                toolbar.SetActive(true);
-                chest.SetActive(true);
-
-                shop.SetActive(true);
-            }
+            EndDialogue();
             
         }
+    }
+
+    // Ends the dialogue/tutorial and restores gameplay UI
+    private void EndDialogue()
+    {
+        dialogueActive = false;
+        StopAllCoroutines();
+        textDisplay.text = "";
+        dialogueBox.SetActive(false);
+        if (toolbar != null) toolbar.SetActive(true);
+        if (chest != null) chest.SetActive(true);
+        if (shop != null) shop.SetActive(true);
+        if (inventory != null) inventory.SetActive(false);
     }
 }

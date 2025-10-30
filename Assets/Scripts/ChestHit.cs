@@ -10,8 +10,9 @@ public class ChestHit : ToolHit
     [SerializeField] GameObject pickUpShovel;
     [SerializeField] GameObject pickUpBag;
     [SerializeField] GameObject pickUpPotato;
+    [SerializeField] GameObject pickUpChickenFeed;
 
-    [SerializeField] int dropCount = 6;
+    [SerializeField] int dropCount = 22;
     [SerializeField] float spread = 0.9f;
 
     List<GameObject> items;
@@ -25,25 +26,37 @@ public class ChestHit : ToolHit
         items.Add(pickUpShovel);
         items.Add(pickUpBag);
         items.Add(pickUpPotato);
+        items.Add(pickUpPotato);
+        items.Add(pickUpPotato);
+        items.Add(pickUpPotato);
+        items.Add(pickUpPotato);
+        items.Add(pickUpPotato);
+        items.Add(pickUpPotato);
+
+        for(int i = 0; i < 10; i++)
+        {
+            items.Add(pickUpChickenFeed);
+        }
     }
 
     public override void Hit()
     {
-        // spawning objects
-        while (dropCount > 0)
-         {
-            dropCount -= 1;
+        // Spawning objects
+        for (int i = 0; i < dropCount; i++)
+        {
+            // Check to prevent out-of-bounds errors if dropCount is larger than the list
+            if (i >= items.Count) { break; }
 
-            // calculating where items will drop
+            // Instantiate the item
+            GameObject newObject = Instantiate(items[i]);
+
+            // Calculate a random position near the chest
             Vector3 position = transform.position;
-            position.x -= spread * UnityEngine.Random.value - spread / 2;
-            position.y -= spread * UnityEngine.Random.value - spread / 2;
-
-            GameObject newObject = Instantiate(items[dropCount]);
+            position.x += spread * UnityEngine.Random.value - spread / 2;
+            position.y += spread * UnityEngine.Random.value - spread / 2;
             newObject.transform.position = position;
-         }
+        }
 
-         Destroy(gameObject);
-        
+        Destroy(gameObject);
     }
 }

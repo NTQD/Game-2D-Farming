@@ -17,13 +17,9 @@ public class CropsReadController : MonoBehaviour
         {
             foreach (TileBase tile in cropData.tiles)
             {
-                if (tile == null) continue;
-                if (!cropsFromTiles.ContainsKey(tile))
-                    cropsFromTiles.Add(tile, cropData);
+                cropsFromTiles.Add(tile, cropData);
             }
         }
-
-        Debug.Log($"✅ CropsReadController: Loaded {cropsFromTiles.Count} crop mappings.");
     }
 
     public Vector3Int GetGridPosition(Vector2 position, bool mousePosition)
@@ -56,19 +52,7 @@ public class CropsReadController : MonoBehaviour
 
     public CropData GetCropData(TileBase tilebase)
     {
-        if (tilebase == null)
-        {
-            Debug.LogWarning("⚠️ CropsReadController.GetCropData: TileBase null.");
-            return null;
-        }
-
-        if (!cropsFromTiles.TryGetValue(tilebase, out CropData cropData))
-        {
-            Debug.LogWarning($"⚠️ CropsReadController: Tile '{tilebase.name}' chưa có trong danh sách cropDatas. Hãy thêm nó vào trong Inspector!");
-            return null;
-        }
-
-        return cropData;
+        return cropsFromTiles[tilebase];
     }
 }
 

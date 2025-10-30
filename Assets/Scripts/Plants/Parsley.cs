@@ -1,12 +1,30 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
-[CreateAssetMenu(menuName = "Data/Crops/Parsley")]
-public class Parsley : Crop
+public class Parsley : MonoBehaviour
 {
-    private void OnEnable()
+    [SerializeField] TileBase state0;
+
+    [SerializeField] TileBase state1;
+
+    [SerializeField] TileBase state2;
+
+    [SerializeField] TileBase state3;
+
+    [SerializeField] TileBase state4;
+
+
+    [SerializeField] Tilemap cropTilemap;
+
+
+    private string currentTime;
+
+    public void Seed(Vector3Int position)
     {
-        cropName = "parsley";
-        growthTime = 10f;
-        totalStages = 5;
+        currentTime = Time.time.ToString("f6");
+        Debug.Log(currentTime.ToString());
+        cropTilemap.SetTile(position, state0);
     }
 }

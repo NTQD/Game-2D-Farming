@@ -10,7 +10,12 @@ public enum PlayerState
 
 public class PlayerControl : MonoBehaviour
 {
-    public float speed;
+    // Tăng giá trị mặc định; có thể chỉnh trong Inspector
+    public float speed = 6.5f;
+    // Hệ số chạy khi giữ phím (ví dụ 2x tốc độ)
+    public float runMultiplier = 4.0f;
+    // Phím để chạy (mặc định LeftShift)
+    public KeyCode runKey = KeyCode.LeftShift;
     public PlayerState currentState;
     private Rigidbody2D myRigidbody2D;
     private Vector3 vector;
@@ -90,10 +95,12 @@ public class PlayerControl : MonoBehaviour
     //Move character
     void Move()
     {
-        myRigidbody2D.MovePosition(transform.position + vector * speed * Time.deltaTime);
-        if (!FindObjectOfType<SoundManager>().SoundIsPlaying("Walk"))
-        {
-            FindObjectOfType<SoundManager>().Play("Walk");
-        }
+        // Áp dụng hệ số chạy nếu giữ phím runKey
+        float speedMultiplier = Input.GetKey(runKey) ? runMultiplier : 1f;
+        myRigidbody2D.MovePosition(transform.position + vector * speed * speedMultiplier * Time.deltaTime);
+         if (!FindObjectOfType<SoundManager>().SoundIsPlaying("Walk"))
+         {
+             FindObjectOfType<SoundManager>().Play("Walk");
+         }
     }
 }
