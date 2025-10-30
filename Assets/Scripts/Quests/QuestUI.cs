@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -29,8 +30,25 @@ public class QuestUI : MonoBehaviour
     {
         if (questPanel == null)
         {
+            Transform panelTransform = transform.Find("QuestPanel");
+            if (panelTransform != null)
+            {
+                questPanel = panelTransform.gameObject;
+            }
+            else
+            {
+                questPanel = LocateObjectInScene("QuestPanel");
+            }
+
+            if (questPanel == null)
+            {
+                Debug.LogWarning("QuestUI: questPanel not assigned and could not be found automatically.");
+            }
+        }
+
+        if (questPanel == null)
+        {
             questPanel = gameObject;
-            Debug.LogWarning("QuestUI: questPanel was not assigned. Defaulting to the GameObject this script is attached to.");
         }
 
         // questPanel.SetActive(false); // Removed: QuestPanel should be initially inactive in Editor
@@ -38,14 +56,7 @@ public class QuestUI : MonoBehaviour
         QuestManager.instance.OnQuestCompleted += OnQuestCompletedHandler;
         QuestManager.instance.OnQuestUpdated += OnQuestUpdatedHandler;
 
-        if (questObjectives == null)
-        {
-            questObjectives = questPanel.GetComponentInChildren<TextMeshProUGUI>();
-            if (questObjectives == null)
-            {
-                Debug.LogError("QuestUI: Could not find the objectives TextMeshProUGUI component in the children of the quest panel.");
-            }
-        }
+        CacheUIReferences();
 
         if (questGiver == null)
         {
@@ -55,6 +66,92 @@ public class QuestUI : MonoBehaviour
                 Debug.LogError("QuestUI: QuestGiver not found in the scene!");
             }
         }
+    }
+
+    private GameObject LocateObjectInScene(string objectName)
+    {
+        if (string.IsNullOrEmpty(objectName))
+        {
+            return null;
+        }
+
+        foreach (GameObject go in Resources.FindObjectsOfTypeAll<GameObject>())
+        {
+            if (go.name.Equals(objectName, StringComparison.OrdinalIgnoreCase) && go.scene.IsValid())
+            {
+                return go;
+            }
+        }
+
+        return null;
+    }
+
+    private void CacheUIReferences()
+    {
+        if (questPanel == null)
+        {
+            return;
+        }
+
+        questTitle ??= FindTextByName("QuestTitleText") ?? FindTextByName("QuestTitle");
+        questDescription ??= FindTextByName("QuestDescriptionText") ?? FindTextByName("QuestDescription");
+        questObjectives ??= FindTextByName("QuestObjectivesText") ?? FindTextByName("QuestObjectives");
+
+        if (questTitle == null || questDescription == null || questObjectives == null)
+        {
+            TextMeshProUGUI[] texts = questPanel.GetComponentsInChildren<TextMeshProUGUI>(true);
+            foreach (var tmp in texts)
+            {
+                if (questTitle == null)
+                {
+                    questTitle = tmp;
+                    continue;
+                }
+
+                if (questDescription == null)
+                {
+                    questDescription = tmp;
+                    continue;
+                }
+
+                if (questObjectives == null)
+                {
+                    questObjectives = tmp;
+                    continue;
+                }
+            }
+        }
+
+        if (questTitle == null)
+        {
+            Debug.LogError("QuestUI: questTitle TextMeshProUGUI not found under questPanel.");
+        }
+        if (questDescription == null)
+        {
+            Debug.LogError("QuestUI: questDescription TextMeshProUGUI not found under questPanel.");
+        }
+        if (questObjectives == null)
+        {
+            Debug.LogError("QuestUI: questObjectives TextMeshProUGUI not found under questPanel.");
+        }
+    }
+
+    private TextMeshProUGUI FindTextByName(string elementName)
+    {
+        if (questPanel == null || string.IsNullOrEmpty(elementName))
+        {
+            return null;
+        }
+
+        foreach (var tmp in questPanel.GetComponentsInChildren<TextMeshProUGUI>(true))
+        {
+            if (tmp.name.Equals(elementName, StringComparison.OrdinalIgnoreCase))
+            {
+                return tmp;
+            }
+        }
+
+        return null;
     }
 
     private void OnDestroy()
@@ -178,6 +275,8 @@ public class QuestUI : MonoBehaviour
 
     public void DisplayAvailableQuests(List<Quest> quests)
     {
+        CacheUIReferences();
+
         availableQuests.Clear();
         if (quests != null)
         {
@@ -201,6 +300,8 @@ public class QuestUI : MonoBehaviour
 
     public void ShowQuest(Quest quest)
     {
+        CacheUIReferences();
+
         if (quest == null)
         {
             questPanel.SetActive(false);
@@ -212,7 +313,15 @@ public class QuestUI : MonoBehaviour
         currentlyDisplayedQuest = quest;
         currentQuestIndex = availableQuests.IndexOf(quest);
 
-        if (questTitle != null) questTitle.text = quest.title;
+        if (questTitle != null)
+        {
+            questTitle.text = quest.title;
+        }
+        else
+        {
+            Debug.LogError("QuestUI: questTitle TextMeshProUGUI is null when trying to set text.");
+        }
+
         if (questDescription != null) questDescription.text = quest.description;
 
         UpdateQuestObjectivesText(quest);
